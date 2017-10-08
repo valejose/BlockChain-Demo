@@ -81,7 +81,7 @@ namespace Visual_Blockchain {
             _arrLabels[(int)ProgramResources.Fields.Hash] = new Label {
                 Height = 25,
                 Width = 60,
-                Margin = new System.Windows.Thickness(10, 185, 0, 0),
+                Margin = new System.Windows.Thickness(10, 215, 0, 0),
                 Content = "Hash:",
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
