@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlockChain_Demo {
     [Serializable]
@@ -11,14 +8,14 @@ namespace BlockChain_Demo {
         private int _blockCount = 0;
 
         public BlockChain() {
-            Block newBlock = new Block(_blockCount, DateTime.Now, "Genesis Block", "0");
+            Block newBlock = new Block(_blockCount, DateTime.Now.ToString(), "Genesis Block", "0");
             _Blocks = new List<Block>();
             _Blocks.Add(newBlock);
             _blockCount++;
         }
 
         public void AddBlock(string data) {
-            _Blocks.Add(new Block(_blockCount, DateTime.Now, data, LastHash));
+            _Blocks.Add(new Block(_blockCount, DateTime.Now.ToString(), data, LastHash));
             _blockCount++;
         }
 

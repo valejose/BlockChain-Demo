@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 namespace BlockChain_Demo {
     [Serializable]
     class Block {
         private int _index;
-        private DateTime _timestamp;
+        private string _timestamp;
         private string _data;
         private string _previousHash;
         private string _hash;
         private int _nonce = 0;
 
-        public Block(int index, DateTime timestamp, string data, string previousHash) {
+        public Block(int index, string timestamp, string data, string previousHash) {
             _index = index;
             _timestamp = timestamp;
             _data = data;
@@ -85,9 +82,15 @@ namespace BlockChain_Demo {
             }
         }
 
+        public string TimeStamp {
+            get {
+                return _timestamp;
+            } 
+        }
+
         public string AllData {
             get {
-                return _previousHash + _data + _nonce.ToString();
+                return _previousHash + _timestamp + _data + _nonce.ToString();
             }
         }
     }
