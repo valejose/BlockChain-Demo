@@ -83,6 +83,7 @@ namespace Visual_Blockchain {
             }
             return hasValidSignature;
         }
+
         #endregion
 
         #region Properties

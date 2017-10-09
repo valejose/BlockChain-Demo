@@ -104,6 +104,16 @@ namespace Visual_Blockchain {
 
             UpdateChain();
         }
+
+        /// <summary>
+        /// Click event that toggles the ability to edit data for a Block.
+        /// </summary>
+        public void LockBlock(object sender, RoutedEventArgs e) {
+            Button btn = (Button)sender;
+
+            int ndx = int.Parse(btn.Name.Substring(3));
+            _lstGraphics[ndx].ToggleLock(Blocks[ndx]);
+        }
         #endregion
 
         #region Properties
