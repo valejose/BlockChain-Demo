@@ -18,7 +18,8 @@ namespace Visual_Blockchain {
         private Grid _grid;
         private Label[] _arrLabels;
         private TextBox[] _arrTextboxes;
-        private Button _button;
+        private Button _mineButton;
+        private Button _lockButton;
         #endregion
 
         #region Constructors
@@ -93,8 +94,8 @@ namespace Visual_Blockchain {
             #region Textboxes
             // Initialize array and put all Textboxes into it
 
-            _arrTextboxes = new TextBox[5];
-            _arrTextboxes[(int)ProgramResources.Fields.Index] = new TextBox {
+            ArrTextboxes = new TextBox[5];
+            ArrTextboxes[(int)ProgramResources.Fields.Index] = new TextBox {
                 Height = 25,
                 Width = 150,
                 Margin = new System.Windows.Thickness(75, 16, 0, 0),
@@ -104,7 +105,7 @@ namespace Visual_Blockchain {
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 IsEnabled = false
             };
-            _arrTextboxes[(int)ProgramResources.Fields.Nonce] = new TextBox {
+            ArrTextboxes[(int)ProgramResources.Fields.Nonce] = new TextBox {
                 Height = 25,
                 Width = 150,
                 Margin = new System.Windows.Thickness(75, 49, 0, 0),
@@ -114,7 +115,7 @@ namespace Visual_Blockchain {
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 IsEnabled = false
             };
-            _arrTextboxes[(int)ProgramResources.Fields.Data] = new TextBox {
+            ArrTextboxes[(int)ProgramResources.Fields.Data] = new TextBox {
                 Name = "txt" + block.Index.ToString(),
                 Height = 100,
                 Width = 150,
@@ -126,7 +127,7 @@ namespace Visual_Blockchain {
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 IsEnabled = true
             };
-            _arrTextboxes[(int)ProgramResources.Fields.Previous] = new TextBox {
+            ArrTextboxes[(int)ProgramResources.Fields.Previous] = new TextBox {
                 Height = 25,
                 Width = 150,
                 Margin = new System.Windows.Thickness(75, 185, 0, 0),
@@ -136,7 +137,7 @@ namespace Visual_Blockchain {
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 IsEnabled = false
             };
-            _arrTextboxes[(int)ProgramResources.Fields.Hash] = new TextBox {
+            ArrTextboxes[(int)ProgramResources.Fields.Hash] = new TextBox {
                 Height = 25,
                 Width = 150,
                 Margin = new System.Windows.Thickness(75, 215, 0, 0),
@@ -148,15 +149,15 @@ namespace Visual_Blockchain {
             };
 
             // TextChanged Event for Data Textbox
-            _arrTextboxes[(int)ProgramResources.Fields.Data].AddHandler(TextBox.TextChangedEvent, new RoutedEventHandler(blockchain.UpdateHash));
+            ArrTextboxes[(int)ProgramResources.Fields.Data].AddHandler(TextBox.TextChangedEvent, new RoutedEventHandler(blockchain.UpdateHash));
             #endregion
 
             #region Buttons
-            _button = new Button {
+            _mineButton = new Button {
                 Name = "btn" + block.Index.ToString(), 
                 Height = 25,
                 Width = 75,
-                Margin = new System.Windows.Thickness(75, 256, 0, 0),
+                Margin = new System.Windows.Thickness(25, 256, 0, 0),
                 Content = "Mine",
                 Background = ProgramResources.blueBrush,
                 Foreground = ProgramResources.whiteBrush,
@@ -164,8 +165,21 @@ namespace Visual_Blockchain {
                 VerticalAlignment = System.Windows.VerticalAlignment.Top
             };
 
+            LockButton = new Button {
+                Name = "btn" + block.Index.ToString(), 
+                Height = 25,
+                Width = 75,
+                Margin = new System.Windows.Thickness(150, 256, 0, 0),
+                Content = "Toggle Lock",
+                Background = ProgramResources.blueBrush,
+                Foreground = ProgramResources.whiteBrush,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalAlignment = System.Windows.VerticalAlignment.Top
+            };
+
             // Click Event for Mine Button
-            _button.AddHandler(Button.ClickEvent, new RoutedEventHandler(blockchain.MineBlock));
+            _mineButton.AddHandler(Button.ClickEvent, new RoutedEventHandler(blockchain.MineBlock));
+            LockButton.AddHandler(Button.ClickEvent, new RoutedEventHandler(blockchain.LockBlock));
             #endregion
 
             // Add all elements to the Grid
@@ -173,7 +187,8 @@ namespace Visual_Blockchain {
                 _grid.Children.Add(_arrLabels[i]);
                 _grid.Children.Add(_arrTextboxes[i]);
             }
-            _grid.Children.Add(_button);
+            _grid.Children.Add(_mineButton);
+            _grid.Children.Add(LockButton);
         }
         #endregion
 
@@ -191,11 +206,19 @@ namespace Visual_Blockchain {
         /// </summary>
         /// <param name="block">Block that contains the data to show in the Textboxes.</param>
         public void UpdateTextBlocks(Block block) {
-            _arrTextboxes[(int)ProgramResources.Fields.Index].Text = block.Index.ToString();
-            _arrTextboxes[(int)ProgramResources.Fields.Nonce].Text = block.Nonce.ToString();
-            _arrTextboxes[(int)ProgramResources.Fields.Data].Text = block.Data;
-            _arrTextboxes[(int)ProgramResources.Fields.Previous].Text = block.Previous;
-            _arrTextboxes[(int)ProgramResources.Fields.Hash].Text = block.Hash;
+            ArrTextboxes[(int)ProgramResources.Fields.Index].Text = block.Index.ToString();
+            ArrTextboxes[(int)ProgramResources.Fields.Nonce].Text = block.Nonce.ToString();
+            ArrTextboxes[(int)ProgramResources.Fields.Data].Text = block.Data;
+            ArrTextboxes[(int)ProgramResources.Fields.Previous].Text = block.Previous;
+            ArrTextboxes[(int)ProgramResources.Fields.Hash].Text = block.Hash;
+        }
+
+        /// <summary>
+        /// Toggle the ability to edit the data textbox for the block
+        /// </summary>
+        /// <param name="block">Block containing the Textboxes.</param>
+        public void ToggleLock(Block block) {
+            ArrTextboxes[(int)ProgramResources.Fields.Data].IsEnabled = !(_arrTextboxes[(int)ProgramResources.Fields.Data].IsEnabled);
         }
         #endregion
 
@@ -214,6 +237,27 @@ namespace Visual_Blockchain {
                 return _arrTextboxes[(int)ProgramResources.Fields.Data].Text;
             }
         }
+
+        /// <summary>
+        /// Get or set the Lock Button
+        /// </summary>
+        private Button LockButton {
+            get { return _lockButton; }
+            set {
+                _lockButton = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or set the textboxes array
+        /// </summary>
+        private TextBox[] ArrTextboxes {
+            get { return _arrTextboxes; }
+            set {
+                _arrTextboxes = value;
+            }
+        }
+
         #endregion     
 
     }
